@@ -1,0 +1,16 @@
+  <article class="snippet-card">
+    <header class="snippet-card__header">
+      <div>
+        <h3>{{ snippet.title }}</h3>
+        <p>{{ snippet.language }}</p>
+      </div>
+    </header>
+
+    <pre><code>{{ snippet.code }}</code></pre>
+
+    <div class="tag-list">
+      @for (tag of snippet.tags; track tag) {
+        <span>{{ tag }}</span>
+      }
+    </div>
+  </article>

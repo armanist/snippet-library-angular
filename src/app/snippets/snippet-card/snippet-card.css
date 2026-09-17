@@ -1,0 +1,56 @@
+.snippet-card {
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #f9fafb;
+}
+
+.snippet-card__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.snippet-card h3 {
+    margin: 0 0 4px;
+    font-size: 18px;
+}
+
+.snippet-card p {
+    margin: 0;
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.snippet-card pre {
+    max-width: 100%;
+    margin: 0 0 12px;
+    padding: 14px;
+    overflow-x: auto;
+    border-radius: 6px;
+    background: #111827;
+    color: #f9fafb;
+}
+
+.snippet-card code {
+    font-family: Consolas, Monaco, monospace;
+    font-size: 14px;
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-list span {
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 12px;
+    font-weight: 700;
+}

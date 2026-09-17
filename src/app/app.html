@@ -1,0 +1,38 @@
+ <main class="app">
+    <header class="app-header">
+      <h1>Snippet Library</h1>
+      <p class="intro">
+        Save small code snippets by language, tags, and title.
+      </p>
+    </header>
+
+    <section class="workspace">
+      <section class="panel">
+        <h2>Add Snippet</h2>
+        
+        <app-snippet-form 
+          (submitted)="handleSnippetSubmitted($event)"
+          (validationError)="handleValidationError($event)"
+        ></app-snippet-form>
+      
+    </section>
+
+      <section class="panel">
+        <h2>Your Snippets</h2>
+
+        <label class="snippet-search">
+          Search
+          <input 
+            type="search" 
+            name="search"
+            [(ngModel)]="searchTerm"
+            placeholder="Search snippets..." 
+          />
+        </label>
+
+          <app-snippet-list [snippets]="filteredSnippets"></app-snippet-list>
+      </section>
+    </section>
+  </main>
+
+  <app-toast [message]="toastMessage" [type]="toastType"></app-toast>

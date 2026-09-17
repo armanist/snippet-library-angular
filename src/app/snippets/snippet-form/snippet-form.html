@@ -1,0 +1,45 @@
+
+  <form class="snippet-form" #snippetForm="ngForm" (ngSubmit)="handleSubmit(snippetForm)">
+    <label>
+      Title
+      <input
+        ngModel 
+        type="text"
+        name="title"
+        required
+        placeholder="PHP foreach loop"
+      />
+    </label>
+
+    <label>
+      Language
+      <select name="language" [(ngModel)]="selectedLanguage">
+        @for (language of languages; track language) {
+            <option [value]="language">{{ language.toUpperCase() }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      Code
+      <textarea
+        ngModel 
+        name="code"
+        required
+        rows="8"
+        placeholder="Paste your code here"
+      ></textarea>
+    </label>
+
+    <label>
+      Tags
+      <input
+        ngModel
+        type="text"
+        name="tags"
+        placeholder="loop, array, php"
+      />
+    </label>
+
+    <button type="submit">Add Snippet</button>
+  </form>
