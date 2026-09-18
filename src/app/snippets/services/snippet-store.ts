@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { exampleSnippets } from '../example-snippets';
+import { SnippetStorage } from './snippet-storage';
 import type { Snippet, SnippetDraft } from '../snippet.model';
 
 @Injectable({
@@ -8,6 +9,12 @@ import type { Snippet, SnippetDraft } from '../snippet.model';
 
 export class SnippetStore {
   private snippets: Snippet[] = [...exampleSnippets];
+
+  constructor(private readonly storage: SnippetStorage) {
+    const storedSnippets = this.storage.load();
+
+    this.snippets = storedSnippets ?? [...exampleSnippets];
+  }
 
   getAll(): Snippet[] {
     return [...this.snippets];
@@ -21,7 +28,14 @@ export class SnippetStore {
     };
 
     this.snippets = [snippet, ...this.snippets];
+    this.storage.save(this.snippets);
 
     return snippet;
+  }
+
+  remove(id: string): void {
+    this.snippets = this.snippets.filter((snippet) => snippet.id !== id);
+
+    this.storage.save(this.snippets);
   }
 }

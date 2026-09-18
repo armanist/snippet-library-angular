@@ -1,5 +1,5 @@
 <div class="snippet-list">
     @for (snippet of snippets; track snippet.id) {
-        <app-snippet-card [snippet]="snippet"></app-snippet-card>
+        <app-snippet-card [snippet]="snippet" (deleteRequested)="handleDelete($event)"></app-snippet-card>
     }
 </div>

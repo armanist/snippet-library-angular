@@ -4,6 +4,13 @@
         <h3>{{ snippet.title }}</h3>
         <p>{{ snippet.language }}</p>
       </div>
+        <button
+            type="button"
+            class="delete-button"
+            (click)="handleDelete()"
+        >
+            Delete
+        </button>
     </header>
 
     <pre><code>{{ snippet.code }}</code></pre>

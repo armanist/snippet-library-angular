@@ -30,7 +30,13 @@
           />
         </label>
 
-          <app-snippet-list [snippets]="filteredSnippets"></app-snippet-list>
+          <app-snippet-list [snippets]="filteredSnippets" (deleteRequested)="handleSnippetDelete($event)"></app-snippet-list>
+          <app-confirm-dialog
+            [visible]="deleteDialogVisible"
+            [snippetTitle]="pendingDeleteTitle"
+            (confirmed)="handleDeleteConfirmed()"
+            (cancelled)="closeDeleteDialog()"
+          ></app-confirm-dialog>
       </section>
     </section>
   </main>

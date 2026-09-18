@@ -54,3 +54,19 @@
     font-size: 12px;
     font-weight: 700;
 }
+
+.delete-button {
+    align-self: start;
+    cursor: pointer;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 6px 10px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.delete-button:hover {
+    background: #fee2e2;
+}

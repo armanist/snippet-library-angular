@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SnippetCard } from '../snippet-card/snippet-card';
 import type { Snippet } from '../snippet.model';
 
@@ -10,4 +10,9 @@ import type { Snippet } from '../snippet.model';
 })
 export class SnippetList {
   @Input({required: true}) snippets!: Snippet[];
+  @Output() deleteRequested = new EventEmitter<string>();
+
+  handleDelete(id: string): void {
+    this.deleteRequested.emit(id)
+  }
 }

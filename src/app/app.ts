@@ -4,12 +4,13 @@ import { SnippetForm } from './snippets/snippet-form/snippet-form';
 import { SnippetStore } from './snippets/services/snippet-store';
 import { Toast } from './shared/toast/toast';
 import { FormsModule } from '@angular/forms';
+import { ConfirmDialog } from './shared/confirm-dialog/confirm-dialog';
 import type { Snippet, SnippetDraft } from './snippets/snippet.model';
 import type { ToastType } from './shared/toast/toast';
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule, SnippetList, SnippetForm, Toast],
+  imports: [FormsModule, SnippetList, SnippetForm, Toast, ConfirmDialog],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -18,6 +19,9 @@ export class App {
   searchTerm = '';
   toastMessage = '';
   toastType: ToastType = 'success';
+  deleteDialogVisible = false;
+  pendingDeleteId: string | null = null;
+  pendingDeleteTitle = '';
 
   constructor(private readonly store: SnippetStore) {
     this.snippets = this.store.getAll();
@@ -39,7 +43,7 @@ export class App {
   get filteredSnippets(): Snippet[] {
     const query = this.searchTerm.trim().toLowerCase();
 
-    if(!query) {
+    if (!query) {
       return this.snippets;
     }
 
@@ -53,6 +57,38 @@ export class App {
 
       return searchableText.includes(query);
     });
+  }
+
+  handleSnippetDelete(id: string): void {
+    const snippet = this.snippets.find((currentSnippet) => currentSnippet.id === id);
+
+    if (!snippet) {
+      return;
+    }
+
+    this.pendingDeleteId = id;
+    this.pendingDeleteTitle = snippet.title;
+    this.deleteDialogVisible = true;
+  }
+
+  handleDeleteConfirmed(): void {
+    if (!this.pendingDeleteId) {
+      return;
+    }
+
+    this.store.remove(this.pendingDeleteId);
+    this.snippets = this.store.getAll();
+
+    this.toastMessage = 'Snippet deleted.';
+    this.toastType = 'success';
+
+    this.closeDeleteDialog();
+  }
+
+  closeDeleteDialog(): void {
+    this.deleteDialogVisible = false;
+    this.pendingDeleteId = null;
+    this.pendingDeleteTitle = '';
   }
 
 }
