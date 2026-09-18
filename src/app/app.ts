@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { SnippetList } from './snippets/snippet-list/snippet-list';
 import { SnippetForm } from './snippets/snippet-form/snippet-form';
 import { SnippetStore } from './snippets/services/snippet-store';
@@ -12,10 +12,11 @@ import type { ToastType } from './shared/toast/toast';
   selector: 'app-root',
   imports: [FormsModule, SnippetList, SnippetForm, Toast, ConfirmDialog],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
-export class App {
-  snippets: Snippet[];
+export class App implements OnInit {
+  snippets = signal<Snippet[]>([]);
+  isLoading = signal(true);
   searchTerm = '';
   toastMessage = '';
   toastType: ToastType = 'success';
@@ -23,16 +24,35 @@ export class App {
   pendingDeleteId: string | null = null;
   pendingDeleteTitle = '';
 
-  constructor(private readonly store: SnippetStore) {
-    this.snippets = this.store.getAll();
+  constructor(private readonly store: SnippetStore) {}
+
+  ngOnInit(): void {
+    this.store.load().subscribe({
+      next: (snippets) => {
+        this.snippets.set(snippets);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        console.error('Angular failed to load snippets:', error);
+        this.isLoading.set(false);
+        this.toastMessage = 'Could not load snippets.';
+        this.toastType = 'error';
+      },
+    });
   }
 
   handleSnippetSubmitted(draft: SnippetDraft): void {
-    this.store.add(draft);
-    this.snippets = this.store.getAll();
-
-    this.toastMessage = 'Snippet added.';
-    this.toastType = 'success';
+    this.store.add(draft).subscribe({
+      next: () => {
+        this.snippets.set(this.store.getAll());
+        this.toastMessage = 'Snippet added.';
+        this.toastType = 'success';
+      },
+      error: () => {
+        this.toastMessage = 'Could not add snippet.';
+        this.toastType = 'error';
+      },
+    });
   }
 
   handleValidationError(message: string): void {
@@ -41,26 +61,31 @@ export class App {
   }
 
   get filteredSnippets(): Snippet[] {
+    const snippets = this.snippets();
     const query = this.searchTerm.trim().toLowerCase();
 
     if (!query) {
-      return this.snippets;
+      return snippets;
     }
 
-    return this.snippets.filter((snippet) => {
+    return snippets.filter((snippet) => {
       const searchableText = [
         snippet.title,
         snippet.language,
         snippet.code,
-        ...snippet.tags
-      ].join(' ').toLowerCase();
+        ...snippet.tags,
+      ]
+        .join(' ')
+        .toLowerCase();
 
       return searchableText.includes(query);
     });
   }
 
   handleSnippetDelete(id: string): void {
-    const snippet = this.snippets.find((currentSnippet) => currentSnippet.id === id);
+    const snippet = this.snippets().find(
+      (currentSnippet) => currentSnippet.id === id,
+    );
 
     if (!snippet) {
       return;
@@ -76,13 +101,20 @@ export class App {
       return;
     }
 
-    this.store.remove(this.pendingDeleteId);
-    this.snippets = this.store.getAll();
+    const snippetId = this.pendingDeleteId;
 
-    this.toastMessage = 'Snippet deleted.';
-    this.toastType = 'success';
-
-    this.closeDeleteDialog();
+    this.store.remove(snippetId).subscribe({
+      next: () => {
+        this.snippets.set(this.store.getAll());
+        this.toastMessage = 'Snippet deleted.';
+        this.toastType = 'success';
+        this.closeDeleteDialog();
+      },
+      error: () => {
+        this.toastMessage = 'Could not delete snippet.';
+        this.toastType = 'error';
+      },
+    });
   }
 
   closeDeleteDialog(): void {
@@ -90,5 +122,4 @@ export class App {
     this.pendingDeleteId = null;
     this.pendingDeleteTitle = '';
   }
-
 }

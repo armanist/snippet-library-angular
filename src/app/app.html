@@ -1,44 +1,54 @@
- <main class="app">
-    <header class="app-header">
-      <h1>Snippet Library</h1>
-      <p class="intro">
-        Save small code snippets by language, tags, and title.
-      </p>
-    </header>
+<main class="app">
+  <header class="app-header">
+    <h1>Snippet Library</h1>
+    <p class="intro">
+      Save small code snippets by language, tags, and title.
+    </p>
+  </header>
 
-    <section class="workspace">
-      <section class="panel">
-        <h2>Add Snippet</h2>
-        
-        <app-snippet-form 
-          (submitted)="handleSnippetSubmitted($event)"
-          (validationError)="handleValidationError($event)"
-        ></app-snippet-form>
-      
+  <section class="workspace">
+    <section class="panel">
+      <h2>Add Snippet</h2>
+
+      <app-snippet-form
+        (submitted)="handleSnippetSubmitted($event)"
+        (validationError)="handleValidationError($event)"
+      ></app-snippet-form>
     </section>
 
-      <section class="panel">
-        <h2>Your Snippets</h2>
+    <section class="panel">
+      <h2>Your Snippets</h2>
 
-        <label class="snippet-search">
-          Search
-          <input 
-            type="search" 
-            name="search"
-            [(ngModel)]="searchTerm"
-            placeholder="Search snippets..." 
-          />
-        </label>
+      <label class="snippet-search">
+        Search
+        <input
+          type="search"
+          name="search"
+          [(ngModel)]="searchTerm"
+          placeholder="Search snippets..."
+        />
+      </label>
 
-          <app-snippet-list [snippets]="filteredSnippets" (deleteRequested)="handleSnippetDelete($event)"></app-snippet-list>
-          <app-confirm-dialog
-            [visible]="deleteDialogVisible"
-            [snippetTitle]="pendingDeleteTitle"
-            (confirmed)="handleDeleteConfirmed()"
-            (cancelled)="closeDeleteDialog()"
-          ></app-confirm-dialog>
-      </section>
+      @if (isLoading()) {
+        <p>Loading snippets...</p>
+      } @else {
+        <app-snippet-list
+          [snippets]="filteredSnippets"
+          (deleteRequested)="handleSnippetDelete($event)"
+        ></app-snippet-list>
+      }
+
+      <app-confirm-dialog
+        [visible]="deleteDialogVisible"
+        [snippetTitle]="pendingDeleteTitle"
+        (confirmed)="handleDeleteConfirmed()"
+        (cancelled)="closeDeleteDialog()"
+      ></app-confirm-dialog>
     </section>
-  </main>
+  </section>
+</main>
 
-  <app-toast [message]="toastMessage" [type]="toastType"></app-toast>
+<app-toast
+  [message]="toastMessage"
+  [type]="toastType"
+></app-toast>

@@ -1,41 +1,39 @@
 import { Injectable } from '@angular/core';
-import { exampleSnippets } from '../example-snippets';
-import { SnippetStorage } from './snippet-storage';
+import { Observable, tap } from 'rxjs';
+import { SnippetApi } from './snippet-api';
 import type { Snippet, SnippetDraft } from '../snippet.model';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class SnippetStore {
-  private snippets: Snippet[] = [...exampleSnippets];
+  private snippets: Snippet[] = [];
 
-  constructor(private readonly storage: SnippetStorage) {
-    const storedSnippets = this.storage.load();
-
-    this.snippets = storedSnippets ?? [...exampleSnippets];
-  }
+  constructor(private readonly api: SnippetApi) {}
 
   getAll(): Snippet[] {
     return [...this.snippets];
   }
 
-  add(draft: SnippetDraft): Snippet {
-    const snippet: Snippet = {
-      id: crypto.randomUUID(),
-      ...draft,
-      createdAt: new Date().toISOString(),
-    };
-
-    this.snippets = [snippet, ...this.snippets];
-    this.storage.save(this.snippets);
-
-    return snippet;
+  load(): Observable<Snippet[]> {
+    return this.api.getAll().pipe(
+      tap((snippets) => {
+        this.snippets = snippets
+      })
+    );
   }
 
-  remove(id: string): void {
-    this.snippets = this.snippets.filter((snippet) => snippet.id !== id);
+  add(draft: SnippetDraft): Observable<Snippet> {
+    return this.api.create(draft).pipe(
+      tap((snippet) => {
+        this.snippets = [snippet, ...this.snippets];
+      })
+    );
+  }
 
-    this.storage.save(this.snippets);
+  remove(id: string): Observable<void> {
+    return this.api.delete(id).pipe(
+      tap(() => this.snippets = this.snippets.filter((snippet) => snippet.id !== id))
+    );
   }
 }
