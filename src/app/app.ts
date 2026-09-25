@@ -45,7 +45,7 @@ export class App implements OnInit {
 
   private readonly refreshQueries = new Subject<SnippetListQuery>();
 
-  private readonly pageSize = 2;
+  private readonly pageSize = 20;
 
   constructor(private readonly store: SnippetStore) { }
 
@@ -75,7 +75,7 @@ export class App implements OnInit {
             .load(query)
             .pipe(
               catchError((error: unknown) => {
-                console.error('Angular faild to load snippets:', error);
+                console.error('Angular failed to load snippets:', error);
                 this.isLoading.set(false);
                 this.toastMessage = 'Could not load snippets.';
                 this.toastType = 'error';
