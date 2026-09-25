@@ -34,7 +34,11 @@ export class SnippetForm {
     };
 
     this.submitted.emit(draft);
-    form.resetForm();
-    this.selectedLanguage = languages[0];
+    form.resetForm({
+      title: '',
+      language: languages[0],
+      code: '',
+      tags: ''
+    });
   }
 }

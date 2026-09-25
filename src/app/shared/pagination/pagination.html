@@ -1,0 +1,26 @@
+  @if (pagination.totalPages > 0) {
+    <nav class="pagination" aria-label="Snippet pagination">
+      <p class="pagination-summary">
+        Page {{ pagination.page }} of {{ pagination.totalPages }}
+        ({{ pagination.total }} snippets)
+      </p>
+
+      <div class="pagination-actions">
+        <button
+          type="button"
+          [disabled]="disabled || pagination.page <= 1"
+          (click)="requestPage(pagination.page - 1)"
+        >
+          Previous
+        </button>
+
+        <button
+          type="button"
+          [disabled]="disabled || pagination.page >= pagination.totalPages"
+          (click)="requestPage(pagination.page + 1)"
+        >
+          Next
+        </button>
+      </div>
+    </nav>
+  }

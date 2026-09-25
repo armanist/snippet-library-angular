@@ -39,6 +39,14 @@
         ></app-snippet-list>
       }
 
+       @if (pagination(); as pageInfo) {
+          <app-pagination
+            [pagination]="pageInfo"
+            [disabled]="isLoading()"
+            (pageChange)="handlePageChange($event)" 
+          ></app-pagination>
+        }
+
       <app-confirm-dialog
         [visible]="deleteDialogVisible"
         [snippetTitle]="pendingDeleteTitle"
