@@ -1,4 +1,4 @@
-<div class="snippet-list">
+<div class="grid gap-4">
     @for (snippet of snippets; track snippet.id) {
         <app-snippet-card [snippet]="snippet" (deleteRequested)="handleDelete($event)"></app-snippet-card>
     }

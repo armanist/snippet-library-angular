@@ -1,9 +1,10 @@
 
-  <form class="snippet-form" #snippetForm="ngForm" (ngSubmit)="handleSubmit(snippetForm)">
-    <label>
+  <form class="grid gap-4" #snippetForm="ngForm" (ngSubmit)="handleSubmit(snippetForm)">
+    <label class="grid gap-1.5 text-sm font-semibold text-slate-700">
       Title
       <input
-        ngModel 
+        class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+        ngModel
         type="text"
         name="title"
         required
@@ -11,19 +12,22 @@
       />
     </label>
 
-    <label>
+    <label class="grid gap-1.5 text-sm font-semibold text-slate-700">
       Language
-      <select name="language" [(ngModel)]="selectedLanguage">
+      <select
+        class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+        name="language" [(ngModel)]="selectedLanguage">
         @for (language of languages; track language) {
             <option [value]="language">{{ language.toUpperCase() }}</option>
         }
       </select>
     </label>
 
-    <label>
+    <label class="grid gap-1.5 text-sm font-semibold text-slate-700">
       Code
       <textarea
-        ngModel 
+        class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+        ngModel
         name="code"
         required
         rows="8"
@@ -31,9 +35,10 @@
       ></textarea>
     </label>
 
-    <label>
+    <label class="grid gap-1.5 text-sm font-semibold text-slate-700">
       Tags
       <input
+        class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
         ngModel
         type="text"
         name="tags"
@@ -41,5 +46,7 @@
       />
     </label>
 
-    <button type="submit">Add Snippet</button>
+    <button  class="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" type="submit">
+      Add Snippet
+    </button>
   </form>

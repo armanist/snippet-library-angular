@@ -7,7 +7,6 @@ import type { Language, SnippetDraft } from '../snippet.model';
   selector: 'app-snippet-form',
   imports: [FormsModule],
   templateUrl: './snippet-form.html',
-  styleUrl: './snippet-form.css',
 })
 export class SnippetForm {
   @Output() submitted = new EventEmitter<SnippetDraft>();

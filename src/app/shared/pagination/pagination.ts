@@ -5,7 +5,6 @@ import type { SnippetPagination } from "../../snippets/snippet.model";
     selector: 'app-pagination',
     imports: [],
     templateUrl: './pagination.html',
-    styleUrl: 'pagination.css',
 })
 export class Pagination {
     @Input() pagination!: SnippetPagination;

@@ -5,7 +5,6 @@ import type { Snippet } from '../snippet.model';
   selector: 'app-snippet-card',
   imports: [],
   templateUrl: './snippet-card.html',
-  styleUrl: './snippet-card.css',
 })
 export class SnippetCard {
   @Input({required: true}) snippet!: Snippet;

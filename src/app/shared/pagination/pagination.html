@@ -1,12 +1,13 @@
   @if (pagination.totalPages > 0) {
-    <nav class="pagination" aria-label="Snippet pagination">
-      <p class="pagination-summary">
+    <nav class="flex flex-wrap items-center justify-between gap-4" aria-label="Snippet pagination">
+      <p class="text-sm text-slate-600">
         Page {{ pagination.page }} of {{ pagination.totalPages }}
         ({{ pagination.total }} snippets)
       </p>
 
-      <div class="pagination-actions">
+      <div class="flex gap-2">
         <button
+          class="cursor-pointer rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font- medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           type="button"
           [disabled]="disabled || pagination.page <= 1"
           (click)="requestPage(pagination.page - 1)"
@@ -15,6 +16,7 @@
         </button>
 
         <button
+          class="cursor-pointer rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font- medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           type="button"
           [disabled]="disabled || pagination.page >= pagination.totalPages"
           (click)="requestPage(pagination.page + 1)"

@@ -6,7 +6,6 @@ export type ToastType = 'success' | 'error';
   selector: 'app-toast',
   imports: [],
   templateUrl: './toast.html',
-  styleUrl: './toast.css',
 })
 export class Toast {
   @Input() message = '';

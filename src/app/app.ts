@@ -28,7 +28,6 @@ import type {
   selector: 'app-root',
   imports: [FormsModule, SnippetList, SnippetForm, Toast, ConfirmDialog, Pagination],
   templateUrl: './app.html',
-  styleUrl: './app.css',
 })
 export class App implements OnInit {
   snippets = signal<Snippet[]>([]);
@@ -45,7 +44,7 @@ export class App implements OnInit {
 
   private readonly refreshQueries = new Subject<SnippetListQuery>();
 
-  private readonly pageSize = 20;
+  private readonly pageSize = 2;
 
   constructor(private readonly store: SnippetStore) { }
 

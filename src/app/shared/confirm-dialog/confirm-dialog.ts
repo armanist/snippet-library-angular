@@ -4,7 +4,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   selector: 'app-confirm-dialog',
   imports: [],
   templateUrl: './confirm-dialog.html',
-  styleUrl: './confirm-dialog.css',
 })
 export class ConfirmDialog {
   @Input() visible = false;
