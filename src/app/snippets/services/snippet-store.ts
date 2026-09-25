@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { SnippetApi } from './snippet-api';
-import type { Snippet, SnippetDraft } from '../snippet.model';
+import type { 
+  Snippet, 
+  SnippetDraft, 
+  SnippetListResponse,
+  SnippetListQuery } from '../snippet.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +19,10 @@ export class SnippetStore {
     return [...this.snippets];
   }
 
-  load(): Observable<Snippet[]> {
-    return this.api.getAll().pipe(
-      tap((snippets) => {
-        this.snippets = snippets
+  load(query: SnippetListQuery): Observable<SnippetListResponse> {
+    return this.api.getAll(query).pipe(
+      tap((response) => {
+        this.snippets = response.snippets
       })
     );
   }

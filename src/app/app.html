@@ -24,7 +24,8 @@
         <input
           type="search"
           name="search"
-          [(ngModel)]="searchTerm"
+          [ngModel]="searchTerm"
+          (ngModelChange)="handleSearchChange($event)"
           placeholder="Search snippets..."
         />
       </label>
@@ -33,7 +34,7 @@
         <p>Loading snippets...</p>
       } @else {
         <app-snippet-list
-          [snippets]="filteredSnippets"
+          [snippets]="snippets()"
           (deleteRequested)="handleSnippetDelete($event)"
         ></app-snippet-list>
       }

@@ -1,3 +1,13 @@
+import {
+  EMPTY,
+  Subject,
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  startWith,
+  switchMap,
+} from 'rxjs';
 import { Component, OnInit, signal } from '@angular/core';
 import { SnippetList } from './snippets/snippet-list/snippet-list';
 import { SnippetForm } from './snippets/snippet-form/snippet-form';
@@ -24,21 +34,42 @@ export class App implements OnInit {
   pendingDeleteId: string | null = null;
   pendingDeleteTitle = '';
 
-  constructor(private readonly store: SnippetStore) {}
+  private readonly searchChanges = new Subject<string>();
+
+  constructor(private readonly store: SnippetStore) { }
 
   ngOnInit(): void {
-    this.store.load().subscribe({
-      next: (snippets) => {
-        this.snippets.set(snippets);
+    this.searchChanges
+      .pipe(
+        map((search) => search.trim()),
+        debounceTime(300),
+        startWith(this.searchTerm.trim()),
+        distinctUntilChanged(),
+        switchMap((search) => {
+          this.isLoading.set(true);
+
+          return this.store
+            .load({ search, page: 1, limit: 20 })
+            .pipe(
+              catchError((error: unknown) => {
+                console.error('Angular faild to load snippets:', error);
+                this.isLoading.set(false);
+                this.toastMessage = 'Could not load snippets.';
+                this.toastType = 'error';
+                return EMPTY;
+              }),
+            );
+        }),
+      )
+      .subscribe((response) => {
+        this.snippets.set(response.snippets);
         this.isLoading.set(false);
-      },
-      error: (error) => {
-        console.error('Angular failed to load snippets:', error);
-        this.isLoading.set(false);
-        this.toastMessage = 'Could not load snippets.';
-        this.toastType = 'error';
-      },
-    });
+      });
+  }
+
+  handleSearchChange(search: string): void {
+    this.searchTerm = search;
+    this.searchChanges.next(search);
   }
 
   handleSnippetSubmitted(draft: SnippetDraft): void {
@@ -58,28 +89,6 @@ export class App implements OnInit {
   handleValidationError(message: string): void {
     this.toastMessage = message;
     this.toastType = 'error';
-  }
-
-  get filteredSnippets(): Snippet[] {
-    const snippets = this.snippets();
-    const query = this.searchTerm.trim().toLowerCase();
-
-    if (!query) {
-      return snippets;
-    }
-
-    return snippets.filter((snippet) => {
-      const searchableText = [
-        snippet.title,
-        snippet.language,
-        snippet.code,
-        ...snippet.tags,
-      ]
-        .join(' ')
-        .toLowerCase();
-
-      return searchableText.includes(query);
-    });
   }
 
   handleSnippetDelete(id: string): void {
