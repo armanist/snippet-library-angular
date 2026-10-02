@@ -33,6 +33,8 @@ export class App implements OnInit {
   snippets = signal<Snippet[]>([]);
   pagination = signal<SnippetPagination | null>(null)
   isLoading = signal(true);
+  editingSnippet = signal<Snippet | null>(null);
+
   searchTerm = '';
   toastMessage = '';
   toastType: ToastType = 'success';
@@ -124,17 +126,42 @@ export class App implements OnInit {
   }
 
   handleSnippetSubmitted(draft: SnippetDraft): void {
-    this.store.add(draft).subscribe({
+    const snippetToEdit = this.editingSnippet();
+
+    const saveRequest = snippetToEdit
+      ? this.store.update(snippetToEdit.id, draft)
+      : this.store.add(draft);
+
+    saveRequest.subscribe({
       next: () => {
+        this.editingSnippet.set(null);
         this.refreshCurrentPage();
-        this.toastMessage = 'Snippet added.';
+        this.toastMessage = snippetToEdit
+          ? 'Snippet updated.'
+          : 'Snippet added.';
         this.toastType = 'success';
       },
       error: () => {
-        this.toastMessage = 'Could not add snippet.';
+        this.toastMessage = snippetToEdit
+        ? 'Could not update snippet.'
+        : 'Could not add snippet.';
         this.toastType = 'error';
-      },
+      }
     });
+  }
+
+  handleEditRequested(id: string): void {
+    const snippet = this.snippets().find(
+      (currentSnippet) => currentSnippet.id === id
+    );
+
+    if(snippet) {
+      this.editingSnippet.set(snippet);
+    }
+  }
+
+  handleEditCanceled(): void {
+    this.editingSnippet.set(null);
   }
 
   handleValidationError(message: string): void {

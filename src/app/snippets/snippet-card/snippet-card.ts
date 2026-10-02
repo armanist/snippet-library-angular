@@ -7,8 +7,13 @@ import type { Snippet } from '../snippet.model';
   templateUrl: './snippet-card.html',
 })
 export class SnippetCard {
-  @Input({required: true}) snippet!: Snippet;
+  @Input({ required: true }) snippet!: Snippet;
+  @Output() editRequested = new EventEmitter<string>();
   @Output() deleteRequested = new EventEmitter<string>();
+
+  handleEdit(): void {
+    this.editRequested.emit(this.snippet.id);
+  }
 
   handleDelete(): void {
     this.deleteRequested.emit(this.snippet.id);

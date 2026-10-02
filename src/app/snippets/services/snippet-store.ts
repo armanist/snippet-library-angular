@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SnippetApi } from './snippet-api';
-import type { 
-  Snippet, 
-  SnippetDraft, 
+import type {
+  Snippet,
+  SnippetDraft,
   SnippetListResponse,
-  SnippetListQuery } from '../snippet.model';
+  SnippetListQuery,
+  SnippetUpdate,
+} from '../snippet.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SnippetStore {
-
   constructor(private readonly api: SnippetApi) {}
 
   load(query: SnippetListQuery): Observable<SnippetListResponse> {
@@ -20,6 +21,10 @@ export class SnippetStore {
 
   add(draft: SnippetDraft): Observable<Snippet> {
     return this.api.create(draft);
+  }
+
+  update(id: string, changes: SnippetUpdate): Observable<Snippet> {
+    return this.api.update(id, changes);
   }
 
   remove(id: string): Observable<void> {

@@ -9,7 +9,12 @@ import type { Snippet } from '../snippet.model';
 })
 export class SnippetList {
   @Input({required: true}) snippets!: Snippet[];
+  @Output() editRequested = new EventEmitter<string>();
   @Output() deleteRequested = new EventEmitter<string>();
+
+  handleEdit(id: string): void {
+    this.editRequested.emit(id);
+  }
 
   handleDelete(id: string): void {
     this.deleteRequested.emit(id)

@@ -5,7 +5,8 @@ import type {
   Snippet,
   SnippetDraft,
   SnippetListQuery,
-  SnippetListResponse
+  SnippetListResponse,
+  SnippetUpdate
 } from '../snippet.model';
 
 @Injectable({
@@ -35,6 +36,10 @@ export class SnippetApi {
 
   create(draft: SnippetDraft): Observable<Snippet> {
     return this.http.post<Snippet>(this.apiUrl, draft);
+  }
+
+  update(id: string, changes: SnippetUpdate): Observable<Snippet> {
+    return this.http.patch<Snippet>(`${this.apiUrl}/${id}`, changes)
   }
 
   delete(id: string): Observable<void> {

@@ -4,7 +4,7 @@
       Title
       <input
         class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
-        ngModel
+        [(ngModel)]="title"
         type="text"
         name="title"
         required
@@ -27,7 +27,7 @@
       Code
       <textarea
         class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
-        ngModel
+        [(ngModel)]="code"
         name="code"
         required
         rows="8"
@@ -39,7 +39,7 @@
       Tags
       <input
         class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
-        ngModel
+        [(ngModel)]="tags"
         type="text"
         name="tags"
         placeholder="loop, array, php"
@@ -47,6 +47,16 @@
     </label>
 
     <button  class="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2" type="submit">
-      Add Snippet
+      {{ editingSnippet ? 'Save Changes' : 'Add Snippet' }}
     </button>
+
+    @if (editingSnippet) {
+      <button
+        type="button"
+        class="rounded-md border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
+        (click)="handleCancel()"
+      >
+        Cancel
+      </button>
+    }
   </form>
