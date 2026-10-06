@@ -12,7 +12,7 @@ import type {
 } from '../snippet.model';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SnippetApi implements SnippetDataStore {
   private readonly http = inject(HttpClient);
