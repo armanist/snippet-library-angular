@@ -13,6 +13,17 @@ import type {
     SnippetListResponse,
     SnippetUpdate
 } from "../snippet.model";
+import type {
+    GetSnippetsQuery,
+    GetSnippetsQueryVariables,
+    CreateSnippetMutation,
+    CreateSnippetMutationVariables,
+    UpdateSnippetMutation,
+    UpdateSnippetMutationVariables,
+    DeleteSnippetMutation,
+    DeleteSnippetMutationVariables,
+ } from '../graphql/generated'
+
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +33,7 @@ export class SnippetGraphqlApi implements SnippetDataStore {
 
     getAll(query: SnippetListQuery): Observable<SnippetListResponse> {
         return this.apollo
-            .query<{ snippets: SnippetListResponse }, SnippetListQuery>({
+            .query<GetSnippetsQuery, GetSnippetsQueryVariables>({
                 query: GET_SNIPPETS_QUERY,
                 variables: query,
                 fetchPolicy: 'network-only',
@@ -40,7 +51,7 @@ export class SnippetGraphqlApi implements SnippetDataStore {
 
     create(draft: SnippetDraft): Observable<Snippet> {
         return this.apollo
-            .mutate<{ createSnippet: Snippet }, { input: SnippetDraft }>({
+            .mutate<CreateSnippetMutation, CreateSnippetMutationVariables>({
                 mutation: CREATE_SNIPPET_MUTATION,
                 variables: { input: draft },
             })
@@ -57,10 +68,7 @@ export class SnippetGraphqlApi implements SnippetDataStore {
 
     update(id: string, changes: SnippetUpdate): Observable<Snippet> {
         return this.apollo
-            .mutate<
-                { updateSnippet: Snippet },
-                { id: string, input: SnippetUpdate }
-            >({
+            .mutate<UpdateSnippetMutation, UpdateSnippetMutationVariables>({
                 mutation: UPDATE_SNIPPET_MUTATION,
                 variables: { id, input: changes },
             })
@@ -77,7 +85,7 @@ export class SnippetGraphqlApi implements SnippetDataStore {
 
     delete(id: string): Observable<void> {
         return this.apollo
-            .mutate<{ deleteSnippet: string }, { id: string }>({
+            .mutate<DeleteSnippetMutation, DeleteSnippetMutationVariables>({
                 mutation: DELETE_SNIPPET_MUTATION,
                 variables: { id }
             })
