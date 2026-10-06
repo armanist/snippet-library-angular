@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { languages } from '../snippet.model';
-import type { Language, Snippet, SnippetDraft } from '../snippet.model';
+import { languages, type Language } from '../contracts/snippet-language';
+import type { Snippet } from '../contracts/snippet';
+import type { SnippetDraft } from '../contracts/create-snippet';
 
 @Component({
   selector: 'app-snippet-form',

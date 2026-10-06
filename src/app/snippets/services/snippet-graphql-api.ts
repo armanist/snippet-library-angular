@@ -6,13 +6,10 @@ import { CREATE_SNIPPET_MUTATION } from "../graphql/snippet-mutations";
 import { UPDATE_SNIPPET_MUTATION } from "../graphql/snippet-mutations";
 import { DELETE_SNIPPET_MUTATION } from "../graphql/snippet-mutations";
 import type { SnippetDataStore } from "../contracts/snippet-data-source";
-import type {
-    Snippet,
-    SnippetDraft,
-    SnippetListQuery,
-    SnippetListResponse,
-    SnippetUpdate
-} from "../snippet.model";
+import type { Snippet } from "../contracts/snippet";
+import type { SnippetDraft } from "../contracts/create-snippet";
+import type { SnippetUpdate } from "../contracts/update-snippet";
+import type { SnippetListQuery, SnippetListResponse } from "../contracts/find-snippet";
 import type {
     GetSnippetsQuery,
     GetSnippetsQueryVariables,

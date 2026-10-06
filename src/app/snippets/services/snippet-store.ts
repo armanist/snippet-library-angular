@@ -1,13 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { SNIPPET_DATA_SOURCE } from '../contracts/snippet-data-source';
-import type {
-  Snippet,
-  SnippetDraft,
-  SnippetListResponse,
-  SnippetListQuery,
-  SnippetUpdate,
-} from '../snippet.model';
+import type { Snippet } from '../contracts/snippet';
+import type { SnippetDraft } from '../contracts/create-snippet';
+import type { SnippetUpdate } from '../contracts/update-snippet';
+import type { SnippetListResponse, SnippetListQuery } from '../contracts/find-snippet';
 
 @Injectable({
   providedIn: 'root',

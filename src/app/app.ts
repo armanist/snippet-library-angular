@@ -17,12 +17,9 @@ import { FormsModule } from '@angular/forms';
 import { ConfirmDialog } from './shared/confirm-dialog/confirm-dialog';
 import { Pagination } from './shared/pagination/pagination';
 import type { ToastType } from './shared/toast/toast';
-import type {
-  Snippet,
-  SnippetDraft,
-  SnippetPagination,
-  SnippetListQuery
-} from './snippets/snippet.model';
+import type { Snippet } from './snippets/contracts/snippet';
+import type { SnippetDraft } from './snippets/contracts/create-snippet';
+import type { SnippetPagination, SnippetListQuery } from './snippets/contracts/find-snippet';
 
 @Component({
   selector: 'app-root',

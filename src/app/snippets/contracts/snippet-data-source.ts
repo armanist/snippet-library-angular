@@ -1,12 +1,9 @@
 import { InjectionToken } from "@angular/core";
 import { Observable } from "rxjs";
-import type {
-    Snippet,
-    SnippetDraft,
-    SnippetListQuery,
-    SnippetListResponse,
-    SnippetUpdate,
-} from "../snippet.model";
+import type { Snippet } from "./snippet";
+import type { SnippetDraft } from "./create-snippet";
+import type { SnippetUpdate } from "./update-snippet";
+import type { SnippetListQuery, SnippetListResponse } from "./find-snippet";
 
 export interface SnippetDataStore {
     getAll(query: SnippetListQuery): Observable<SnippetListResponse>;

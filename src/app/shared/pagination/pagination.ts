@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import type { SnippetPagination } from "../../snippets/snippet.model";
+import type { SnippetPagination } from "../../snippets/contracts/find-snippet";
 
 @Component ({
     selector: 'app-pagination',

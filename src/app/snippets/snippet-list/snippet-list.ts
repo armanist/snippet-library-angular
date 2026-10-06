@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SnippetCard } from '../snippet-card/snippet-card';
-import type { Snippet } from '../snippet.model';
+import type { Snippet } from '../contracts/snippet';
 
 @Component({
   selector: 'app-snippet-list',
