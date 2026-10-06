@@ -1,6 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_BASE_URL } from '../../api-config';
+import type { SnippetDataStore } from '../contracts/snippet-data-source';
 import type {
   Snippet,
   SnippetDraft,
@@ -12,9 +14,9 @@ import type {
 @Injectable({
   providedIn: 'root',
 })
-export class SnippetApi {
+export class SnippetApi implements SnippetDataStore {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3000/snippets';
+  private readonly apiUrl = `${API_BASE_URL}/snippets`;
 
   getAll(query: SnippetListQuery): Observable<SnippetListResponse> {
     let params = new HttpParams();

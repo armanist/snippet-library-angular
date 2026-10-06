@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SnippetApi } from './snippet-api';
+import { SNIPPET_DATA_SOURCE } from '../contracts/snippet-data-source';
 import type {
   Snippet,
   SnippetDraft,
@@ -13,21 +13,21 @@ import type {
   providedIn: 'root',
 })
 export class SnippetStore {
-  constructor(private readonly api: SnippetApi) {}
+  private readonly dataSource = inject(SNIPPET_DATA_SOURCE)
 
   load(query: SnippetListQuery): Observable<SnippetListResponse> {
-    return this.api.getAll(query);
+    return this.dataSource.getAll(query);
   }
 
   add(draft: SnippetDraft): Observable<Snippet> {
-    return this.api.create(draft);
+    return this.dataSource.create(draft);
   }
 
   update(id: string, changes: SnippetUpdate): Observable<Snippet> {
-    return this.api.update(id, changes);
+    return this.dataSource.update(id, changes);
   }
 
   remove(id: string): Observable<void> {
-    return this.api.delete(id);
+    return this.dataSource.delete(id);
   }
 }
