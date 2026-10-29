@@ -55,10 +55,10 @@
         }
 
       <app-confirm-dialog
-        [visible]="deleteDialogVisible"
-        [snippetTitle]="pendingDeleteTitle"
+        [visible]="confirmDialog.visible()"
+        [snippetTitle]="confirmDialog.pendingTitle()"
         (confirmed)="handleDeleteConfirmed()"
-        (cancelled)="closeDeleteDialog()"
+        (cancelled)="confirmDialog.close()"
       ></app-confirm-dialog>
     </section>
   </section>

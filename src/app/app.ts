@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { ConfirmDialog } from './shared/confirm-dialog/confirm-dialog';
 import { Pagination } from './shared/pagination/pagination';
 import { ToastService } from './shared/toast/toast-service';
+import { ConfirmDialogService } from './shared/confirm-dialog/confirm-dialog-service';
 import type { Snippet } from './snippets/contracts/snippet';
 import type { SnippetDraft } from './snippets/contracts/create-snippet';
 import type { SnippetPagination, SnippetListQuery } from './snippets/contracts/find-snippet';
@@ -33,10 +34,6 @@ export class App implements OnInit {
   editingSnippet = signal<Snippet | null>(null);
 
   searchTerm = '';
-  
-  deleteDialogVisible = false;
-  pendingDeleteId: string | null = null;
-  pendingDeleteTitle = '';
 
   private readonly listQueries = new Subject<SnippetListQuery>();
 
@@ -45,8 +42,9 @@ export class App implements OnInit {
   private readonly pageSize = 2;
 
   constructor(
-    private readonly store: SnippetStore, 
-    protected readonly toast: ToastService
+    private readonly store: SnippetStore,
+    protected readonly toast: ToastService,
+    protected readonly confirmDialog: ConfirmDialogService,
   ) { }
 
   ngOnInit(): void {
@@ -139,13 +137,13 @@ export class App implements OnInit {
         let message = snippetToEdit
           ? 'Snippet updated.'
           : 'Snippet added.';
-       
+
         this.toast.showSuccess(message);
       },
       error: () => {
         let message = snippetToEdit
-        ? 'Could not update snippet.'
-        : 'Could not add snippet.';
+          ? 'Could not update snippet.'
+          : 'Could not add snippet.';
 
         this.toast.showError(message);
       }
@@ -157,7 +155,7 @@ export class App implements OnInit {
       (currentSnippet) => currentSnippet.id === id
     );
 
-    if(snippet) {
+    if (snippet) {
       this.editingSnippet.set(snippet);
     }
   }
@@ -175,26 +173,24 @@ export class App implements OnInit {
       return;
     }
 
-    this.pendingDeleteId = id;
-    this.pendingDeleteTitle = snippet.title;
-    this.deleteDialogVisible = true;
+    this.confirmDialog.open(id, snippet.title)
   }
 
   handleDeleteConfirmed(): void {
-    if (!this.pendingDeleteId) {
+    const snippetId = this.confirmDialog.pendingId();
+
+    if (!snippetId) {
       return;
     }
-
-    const snippetId = this.pendingDeleteId;
 
     const currentPage = this.pagination()?.page ?? 1;
 
     const isCurrentPageEmpty = this.snippets().length === 1;
 
     const pageAfterDelete =
-    isCurrentPageEmpty && currentPage > 1
-      ? currentPage - 1
-      : currentPage;
+      isCurrentPageEmpty && currentPage > 1
+        ? currentPage - 1
+        : currentPage;
 
     this.store.remove(snippetId).subscribe({
       next: () => {
@@ -202,17 +198,11 @@ export class App implements OnInit {
 
         this.toast.showSuccess('Snippet deleted.');
 
-        this.closeDeleteDialog();
+        this.confirmDialog.close();
       },
       error: () => {
         this.toast.showError('Could not delete snippet.');
       },
     });
-  }
-
-  closeDeleteDialog(): void {
-    this.deleteDialogVisible = false;
-    this.pendingDeleteId = null;
-    this.pendingDeleteTitle = '';
   }
 }
