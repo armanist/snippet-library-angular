@@ -16,7 +16,7 @@ import { Toast } from './shared/toast/toast';
 import { FormsModule } from '@angular/forms';
 import { ConfirmDialog } from './shared/confirm-dialog/confirm-dialog';
 import { Pagination } from './shared/pagination/pagination';
-import type { ToastType } from './shared/toast/toast';
+import { ToastService } from './shared/toast/toast-service';
 import type { Snippet } from './snippets/contracts/snippet';
 import type { SnippetDraft } from './snippets/contracts/create-snippet';
 import type { SnippetPagination, SnippetListQuery } from './snippets/contracts/find-snippet';
@@ -33,8 +33,7 @@ export class App implements OnInit {
   editingSnippet = signal<Snippet | null>(null);
 
   searchTerm = '';
-  toastMessage = '';
-  toastType: ToastType = 'success';
+  
   deleteDialogVisible = false;
   pendingDeleteId: string | null = null;
   pendingDeleteTitle = '';
@@ -45,7 +44,10 @@ export class App implements OnInit {
 
   private readonly pageSize = 2;
 
-  constructor(private readonly store: SnippetStore) { }
+  constructor(
+    private readonly store: SnippetStore, 
+    protected readonly toast: ToastService
+  ) { }
 
   ngOnInit(): void {
     merge(
@@ -75,8 +77,9 @@ export class App implements OnInit {
               catchError((error: unknown) => {
                 console.error('Angular failed to load snippets:', error);
                 this.isLoading.set(false);
-                this.toastMessage = 'Could not load snippets.';
-                this.toastType = 'error';
+
+                this.toast.showError('Could not load snippets.');
+
                 return EMPTY;
               }),
             );
@@ -133,16 +136,18 @@ export class App implements OnInit {
       next: () => {
         this.editingSnippet.set(null);
         this.refreshCurrentPage();
-        this.toastMessage = snippetToEdit
+        let message = snippetToEdit
           ? 'Snippet updated.'
           : 'Snippet added.';
-        this.toastType = 'success';
+       
+        this.toast.showSuccess(message);
       },
       error: () => {
-        this.toastMessage = snippetToEdit
+        let message = snippetToEdit
         ? 'Could not update snippet.'
         : 'Could not add snippet.';
-        this.toastType = 'error';
+
+        this.toast.showError(message);
       }
     });
   }
@@ -159,11 +164,6 @@ export class App implements OnInit {
 
   handleEditCanceled(): void {
     this.editingSnippet.set(null);
-  }
-
-  handleValidationError(message: string): void {
-    this.toastMessage = message;
-    this.toastType = 'error';
   }
 
   handleSnippetDelete(id: string): void {
@@ -199,13 +199,13 @@ export class App implements OnInit {
     this.store.remove(snippetId).subscribe({
       next: () => {
         this.refreshCurrentPage(pageAfterDelete);
-        this.toastMessage = 'Snippet deleted.';
-        this.toastType = 'success';
+
+        this.toast.showSuccess('Snippet deleted.');
+
         this.closeDeleteDialog();
       },
       error: () => {
-        this.toastMessage = 'Could not delete snippet.';
-        this.toastType = 'error';
+        this.toast.showError('Could not delete snippet.');
       },
     });
   }
