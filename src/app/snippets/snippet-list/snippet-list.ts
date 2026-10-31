@@ -1,22 +1,26 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Pagination } from '../../shared/pagination/pagination';
+import { SnippetListService } from './snippet-list-service';
 import { SnippetCard } from '../snippet-card/snippet-card';
 import type { Snippet } from '../contracts/snippet';
 
 @Component({
   selector: 'app-snippet-list',
-  imports: [SnippetCard],
+  imports: [FormsModule, SnippetCard, Pagination],
   templateUrl: './snippet-list.html',
 })
 export class SnippetList {
-  @Input({required: true}) snippets!: Snippet[];
-  @Output() editRequested = new EventEmitter<string>();
-  @Output() deleteRequested = new EventEmitter<string>();
+  @Output() editRequested = new EventEmitter<Snippet>();
+  @Output() deleteRequested = new EventEmitter<Snippet>();
 
-  handleEdit(id: string): void {
-    this.editRequested.emit(id);
+  constructor(protected readonly list: SnippetListService) {}
+
+  handleEdit(snippet: Snippet): void {
+    this.editRequested.emit(snippet);
   }
 
-  handleDelete(id: string): void {
-    this.deleteRequested.emit(id)
+  handleDelete(snippet: Snippet): void {
+    this.deleteRequested.emit(snippet)
   }
 }

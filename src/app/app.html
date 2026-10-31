@@ -23,36 +23,10 @@
     <section  class="min-w-0 min-h-[220px] rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
       <h2 class="mb-4 text-xl font-semibold text-slate-900">Your Snippets</h2>
 
-      <label class="mb-4 grid gap-1.5 text-sm font-semibold text-slate-700">
-        Search
-        <input
-          class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
-          type="search"
-          name="search"
-          [ngModel]="searchTerm"
-          (ngModelChange)="handleSearchChange($event)"
-          placeholder="Search snippets..."
-        />
-      </label>
-
-      @if (isLoading()) {
-        <p class="text-sm text-slate-500">Loading snippets...</p>
-      } @else {
-        <app-snippet-list
-          [snippets]="snippets()"
-          (editRequested)="handleEditRequested($event)"
-          (deleteRequested)="handleSnippetDelete($event)"
-        ></app-snippet-list>
-      }
-
-       @if (pagination(); as pageInfo) {
-          <app-pagination
-             class="mt-5 block"
-            [pagination]="pageInfo"
-            [disabled]="isLoading()"
-            (pageChange)="handlePageChange($event)" 
-          ></app-pagination>
-        }
+      <app-snippet-list
+        (editRequested)="editingSnippet.set($event)"
+        (deleteRequested)="confirmDialog.open($event.id, $event.title)"
+      ></app-snippet-list>
 
       <app-confirm-dialog
         [visible]="confirmDialog.visible()"

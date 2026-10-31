@@ -8,14 +8,14 @@ import type { Snippet } from '../contracts/snippet';
 })
 export class SnippetCard {
   @Input({ required: true }) snippet!: Snippet;
-  @Output() editRequested = new EventEmitter<string>();
-  @Output() deleteRequested = new EventEmitter<string>();
+  @Output() editRequested = new EventEmitter<Snippet>();
+  @Output() deleteRequested = new EventEmitter<Snippet>();
 
   handleEdit(): void {
-    this.editRequested.emit(this.snippet.id);
+    this.editRequested.emit(this.snippet);
   }
 
   handleDelete(): void {
-    this.deleteRequested.emit(this.snippet.id);
+    this.deleteRequested.emit(this.snippet);
   }
 }

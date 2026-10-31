@@ -1,10 +1,30 @@
+<label class="mb-4 grid gap-1.5 text-sm font-semibold text-slate-700">
+  Search
+  <input
+    class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+    type="search" name="search" [ngModel]="list.searchTerm()" (ngModelChange)="list.search($event)"
+    placeholder="Search snippets..." />
+</label>
+
+@if(list.isLoading()) {
+<p class="text-sm text-slate-500">Loading snippets...</p>
+} @else {
 <div class="grid gap-4">
-  @for (snippet of snippets; track snippet.id) {
-    <app-snippet-card
-      [snippet]="snippet"
-      (editRequested)="handleEdit($event)"
-      (deleteRequested)="handleDelete($event)"
-    >
-    </app-snippet-card>
+  @for (snippet of list.snippets(); track snippet.id) {
+  <app-snippet-card 
+    [snippet]="snippet" 
+    (editRequested)="handleEdit($event)" 
+    (deleteRequested)="handleDelete($event)">
+  </app-snippet-card>
   }
 </div>
+}
+
+@if (list.pagination(); as pageInfo) {
+  <app-pagination 
+    class="mt-5 block" 
+    [pagination]="pageInfo" 
+    [disabled]="list.isLoading()"
+    (pageChange)="list.goToPage($event)">
+  </app-pagination>
+}
