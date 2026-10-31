@@ -29,7 +29,7 @@ export class SnippetListService {
     readonly isLoading = this.isLoadingState.asReadonly();
     readonly searchTerm = this.searchTermState.asReadonly();
 
-    private readonly store = inject(SNIPPET_DATA_SOURCE);
+    private readonly dataSource = inject(SNIPPET_DATA_SOURCE);
     private readonly toast = inject(ToastService);
     private readonly changes = inject(SnippetChanges);
 
@@ -93,7 +93,7 @@ export class SnippetListService {
     private loadSnippets(query: SnippetListQuery) {
         this.isLoadingState.set(true);
 
-        return this.store.getAll(query).pipe(
+        return this.dataSource.getAll(query).pipe(
             catchError((error: unknown) => {
                 console.error('Angular failed to load snippets:', error);
                 this.isLoadingState.set(false);

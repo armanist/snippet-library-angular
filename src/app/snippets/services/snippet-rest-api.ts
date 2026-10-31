@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from '../../api-config';
-import type { SnippetDataStore } from '../contracts/snippet-data-source';
+import type { SnippetDataSource } from '../contracts/snippet-data-source';
 import type { Snippet } from '../contracts/snippet';
 import type { SnippetDraft } from '../contracts/create-snippet';
 import type { SnippetUpdate } from '../contracts/update-snippet';
@@ -11,7 +11,7 @@ import type { SnippetListQuery, SnippetListResponse } from '../contracts/find-sn
 @Injectable({
   providedIn: 'root'
 })
-export class SnippetRestApi implements SnippetDataStore {
+export class SnippetRestApi implements SnippetDataSource {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${API_BASE_URL}/snippets`;
 

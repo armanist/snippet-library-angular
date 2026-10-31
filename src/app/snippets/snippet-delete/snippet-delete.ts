@@ -8,7 +8,7 @@ import { SNIPPET_DATA_SOURCE } from "../contracts/snippet-data-source";
     providedIn: 'root'
 })
 export class SnippetDelete {
-    private readonly store = inject(SNIPPET_DATA_SOURCE);
+    private readonly dataSource = inject(SNIPPET_DATA_SOURCE);
     private readonly toast = inject(ToastService);
     private readonly changes = inject(SnippetChanges);
     private readonly confirmDialog = inject(ConfirmDialogService);
@@ -20,7 +20,7 @@ export class SnippetDelete {
             return;
         }
 
-        this.store.delete(snippetId).subscribe({
+        this.dataSource.delete(snippetId).subscribe({
             next: () => {
                 this.changes.notify();
 

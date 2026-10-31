@@ -9,7 +9,7 @@ import type { Snippet } from "../contracts/snippet";
     providedIn: 'root'
 })
 export class SnippetFormService {
-    private readonly store = inject(SNIPPET_DATA_SOURCE);
+    private readonly dataSource = inject(SNIPPET_DATA_SOURCE);
     private readonly toast = inject(ToastService);
     private readonly changes = inject(SnippetChanges);
 
@@ -29,8 +29,8 @@ export class SnippetFormService {
         const snippetToEdit = this.editingSnippetState();
 
         const saveRequest = snippetToEdit
-            ? this.store.update(snippetToEdit.id, draft)
-            : this.store.create(draft);
+            ? this.dataSource.update(snippetToEdit.id, draft)
+            : this.dataSource.create(draft);
 
         saveRequest.subscribe({
             next: () => {

@@ -5,7 +5,7 @@ import { GET_SNIPPETS_QUERY } from "../graphql/snippet-queries";
 import { CREATE_SNIPPET_MUTATION } from "../graphql/snippet-mutations";
 import { UPDATE_SNIPPET_MUTATION } from "../graphql/snippet-mutations";
 import { DELETE_SNIPPET_MUTATION } from "../graphql/snippet-mutations";
-import type { SnippetDataStore } from "../contracts/snippet-data-source";
+import type { SnippetDataSource } from "../contracts/snippet-data-source";
 import type { Snippet } from "../contracts/snippet";
 import type { SnippetDraft } from "../contracts/create-snippet";
 import type { SnippetUpdate } from "../contracts/update-snippet";
@@ -25,7 +25,7 @@ import type {
 @Injectable({
     providedIn: 'root'
 })
-export class SnippetGraphqlApi implements SnippetDataStore {
+export class SnippetGraphqlApi implements SnippetDataSource {
     private readonly apollo = inject(Apollo);
 
     getAll(query: SnippetListQuery): Observable<SnippetListResponse> {
