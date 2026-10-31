@@ -11,7 +11,7 @@ import type { SnippetListQuery, SnippetListResponse } from '../contracts/find-sn
 @Injectable({
   providedIn: 'root'
 })
-export class SnippetApi implements SnippetDataStore {
+export class SnippetRestApi implements SnippetDataStore {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${API_BASE_URL}/snippets`;
 

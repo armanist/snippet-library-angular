@@ -10,13 +10,13 @@ import { API_BASE_URL } from './api-config';
 import { routes } from './app.routes';
 import { environment } from '../environments/environment';
 import { SNIPPET_DATA_SOURCE } from './snippets/contracts/snippet-data-source';
-import { SnippetApi } from './snippets/services/snippet-api';
+import { SnippetRestApi } from './snippets/services/snippet-rest-api';
 import { SnippetGraphqlApi } from './snippets/services/snippet-graphql-api';
 
 const SnippetDataSource = 
   environment.snippetTransport === 'graphql'
     ? SnippetGraphqlApi
-    : SnippetApi
+    : SnippetRestApi
 
 export const appConfig: ApplicationConfig = {
   providers: [
