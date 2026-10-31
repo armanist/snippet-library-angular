@@ -31,7 +31,7 @@
       <app-confirm-dialog
         [visible]="confirmDialog.visible()"
         [snippetTitle]="confirmDialog.pendingTitle()"
-        (confirmed)="handleDeleteConfirmed()"
+        (confirmed)="snippetDelete.confirm()"
         (cancelled)="confirmDialog.close()"
       ></app-confirm-dialog>
     </section>

@@ -7,6 +7,7 @@ import { Toast } from './shared/toast/toast';
 import { ConfirmDialog } from './shared/confirm-dialog/confirm-dialog';
 import { ToastService } from './shared/toast/toast-service';
 import { ConfirmDialogService } from './shared/confirm-dialog/confirm-dialog-service';
+import { SnippetDelete } from './snippets/snippet-delete/snippet-delete';
 import type { Snippet } from './snippets/contracts/snippet';
 import type { SnippetDraft } from './snippets/contracts/create-snippet';
 
@@ -23,6 +24,7 @@ export class App {
     protected readonly toast: ToastService,
     protected readonly confirmDialog: ConfirmDialogService,
     protected readonly changes: SnippetChanges,
+    protected readonly snippetDelete: SnippetDelete,
   ) { }
 
   handleSnippetSubmitted(draft: SnippetDraft): void {
@@ -55,26 +57,5 @@ export class App {
 
   handleEditCanceled(): void {
     this.editingSnippet.set(null);
-  }
-
-  handleDeleteConfirmed(): void {
-    const snippetId = this.confirmDialog.pendingId();
-
-    if (!snippetId) {
-      return;
-    }
-
-    this.store.remove(snippetId).subscribe({
-      next: () => {
-        this.changes.notify();
-
-        this.toast.showSuccess('Snippet deleted.');
-
-        this.confirmDialog.close();
-      },
-      error: () => {
-        this.toast.showError('Could not delete snippet.');
-      },
-    });
   }
 }
