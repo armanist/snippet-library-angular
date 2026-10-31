@@ -2,13 +2,13 @@ import { Injectable, inject } from "@angular/core";
 import { ConfirmDialogService } from "../../shared/confirm-dialog/confirm-dialog-service";
 import { ToastService } from "../../shared/toast/toast-service";
 import { SnippetChanges } from "../services/snippet-changes";
-import { SnippetStore } from "../services/snippet-store";
+import { SNIPPET_DATA_SOURCE } from "../contracts/snippet-data-source";
 
 @Injectable({
     providedIn: 'root'
 })
 export class SnippetDelete {
-    private readonly store = inject(SnippetStore);
+    private readonly store = inject(SNIPPET_DATA_SOURCE);
     private readonly toast = inject(ToastService);
     private readonly changes = inject(SnippetChanges);
     private readonly confirmDialog = inject(ConfirmDialogService);
@@ -20,7 +20,7 @@ export class SnippetDelete {
             return;
         }
 
-        this.store.remove(snippetId).subscribe({
+        this.store.delete(snippetId).subscribe({
             next: () => {
                 this.changes.notify();
 

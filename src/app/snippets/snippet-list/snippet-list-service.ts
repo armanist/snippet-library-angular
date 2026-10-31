@@ -10,8 +10,8 @@ import {
     switchMap,
 } from 'rxjs';
 import { SnippetChanges } from '../services/snippet-changes';
-import { SnippetStore } from "../services/snippet-store";
 import { ToastService } from "../../shared/toast/toast-service";
+import { SNIPPET_DATA_SOURCE } from "../contracts/snippet-data-source";
 import type { Snippet } from "../contracts/snippet";
 import type { SnippetPagination, SnippetListQuery } from "../contracts/find-snippet";
 
@@ -29,7 +29,7 @@ export class SnippetListService {
     readonly isLoading = this.isLoadingState.asReadonly();
     readonly searchTerm = this.searchTermState.asReadonly();
 
-    private readonly store = inject(SnippetStore);
+    private readonly store = inject(SNIPPET_DATA_SOURCE);
     private readonly toast = inject(ToastService);
     private readonly changes = inject(SnippetChanges);
 
@@ -93,7 +93,7 @@ export class SnippetListService {
     private loadSnippets(query: SnippetListQuery) {
         this.isLoadingState.set(true);
 
-        return this.store.load(query).pipe(
+        return this.store.getAll(query).pipe(
             catchError((error: unknown) => {
                 console.error('Angular failed to load snippets:', error);
                 this.isLoadingState.set(false);

@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from "@angular/core";
 import { ToastService } from "../../shared/toast/toast-service";
 import { SnippetChanges } from "../services/snippet-changes";
-import { SnippetStore } from "../services/snippet-store";
+import { SNIPPET_DATA_SOURCE } from "../contracts/snippet-data-source";
 import type { SnippetDraft } from "../contracts/create-snippet";
 import type { Snippet } from "../contracts/snippet";
 
@@ -9,7 +9,7 @@ import type { Snippet } from "../contracts/snippet";
     providedIn: 'root'
 })
 export class SnippetFormService {
-    private readonly store = inject(SnippetStore);
+    private readonly store = inject(SNIPPET_DATA_SOURCE);
     private readonly toast = inject(ToastService);
     private readonly changes = inject(SnippetChanges);
 
@@ -30,7 +30,7 @@ export class SnippetFormService {
 
         const saveRequest = snippetToEdit
             ? this.store.update(snippetToEdit.id, draft)
-            : this.store.add(draft);
+            : this.store.create(draft);
 
         saveRequest.subscribe({
             next: () => {
