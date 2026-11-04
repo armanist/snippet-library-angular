@@ -17,6 +17,14 @@ export class SnippetFormService {
 
     readonly editingSnippet = this.editingSnippetState.asReadonly();
 
+    constructor() {
+        this.changes.deleted.subscribe((id) => {
+            if(this.editingSnippetState()?.id === id) {
+                this.cancelEdit();
+            }
+        });
+    }
+
     startEdit(snippet: Snippet): void {
         this.editingSnippetState.set(snippet);
     }

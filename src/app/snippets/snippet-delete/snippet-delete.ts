@@ -22,6 +22,7 @@ export class SnippetDelete {
 
         this.dataSource.delete(snippetId).subscribe({
             next: () => {
+                this.changes.notifyDeleted(snippetId);
                 this.changes.notify();
 
                 this.toast.showSuccess('Snippet deleted.');
