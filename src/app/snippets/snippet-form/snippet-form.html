@@ -5,20 +5,25 @@
       <input
         class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
         [(ngModel)]="title"
+        #titleModel="ngModel"
         type="text"
         name="title"
         required
         placeholder="PHP foreach loop"
       />
+      @if (titleModel.invalid && titleModel.touched) {
+        <p class="text-xs font-normal text-red-600">Title is required.</p>
+      }
     </label>
 
     <label class="grid gap-1.5 text-sm font-semibold text-slate-700">
       Language
       <select
         class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
-        name="language" [(ngModel)]="selectedLanguage">
+        name="language" 
+        [(ngModel)]="selectedLanguage">
         @for (language of languages; track language) {
-            <option [value]="language">{{ language.toUpperCase() }}</option>
+          <option [value]="language">{{ language.toUpperCase() }}</option>
         }
       </select>
     </label>
@@ -28,11 +33,15 @@
       <textarea
         class="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
         [(ngModel)]="code"
+        #codeModel="ngModel"
         name="code"
         required
         rows="8"
         placeholder="Paste your code here"
       ></textarea>
+      @if (codeModel.invalid && codeModel.touched) {
+        <p class="text-xs font-normal text-red-600">Code is required.</p>
+      }
     </label>
 
     <label class="grid gap-1.5 text-sm font-semibold text-slate-700">
