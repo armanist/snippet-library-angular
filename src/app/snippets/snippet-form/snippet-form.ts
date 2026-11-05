@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { 
+  Component, 
+  EventEmitter, 
+  Input, 
+  Output, 
+  OnChanges, 
+  SimpleChanges,
+  ViewChild,
+  ElementRef, 
+} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { languages, type Language } from '../contracts/snippet-language';
 import type { Snippet } from '../contracts/snippet';
@@ -14,6 +23,7 @@ export class SnippetForm implements OnChanges {
   @Output() submitted = new EventEmitter<SnippetDraft>();
   @Output() validationError = new EventEmitter<string>();
   @Output() canceled = new EventEmitter<void>();
+  @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
 
   readonly languages = languages;
 
@@ -28,6 +38,10 @@ export class SnippetForm implements OnChanges {
     }
     
     const snippet = this.editingSnippet;
+
+    if(snippet) {
+      this.titleInput.nativeElement.focus();
+    }
 
     this.title = snippet?.title ?? '';
     this.selectedLanguage = snippet?.language ?? languages[0];
