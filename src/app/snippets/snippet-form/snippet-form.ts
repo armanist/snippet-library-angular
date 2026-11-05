@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { languages, type Language } from '../contracts/snippet-language';
 import type { Snippet } from '../contracts/snippet';
@@ -22,7 +22,11 @@ export class SnippetForm implements OnChanges {
   code = '';
   tags = '';
 
-  ngOnChanges(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if(!changes['editingSnippet']) {
+      return;
+    }
+    
     const snippet = this.editingSnippet;
 
     this.title = snippet?.title ?? '';
