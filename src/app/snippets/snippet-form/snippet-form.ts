@@ -6,7 +6,8 @@ import {
   OnChanges, 
   SimpleChanges,
   ViewChild,
-  ElementRef, 
+  ElementRef,
+  viewChild, 
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { languages, type Language } from '../contracts/snippet-language';
@@ -24,6 +25,7 @@ export class SnippetForm implements OnChanges {
   @Output() validationError = new EventEmitter<string>();
   @Output() canceled = new EventEmitter<void>();
   @ViewChild('titleInput') titleInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('snippetForm') ngForm?: NgForm;
 
   readonly languages = languages;
 
@@ -47,6 +49,13 @@ export class SnippetForm implements OnChanges {
     this.selectedLanguage = snippet?.language ?? languages[0];
     this.code = snippet?.code ?? '';
     this.tags = snippet?.tags.join(', ') ?? '';
+
+    this.ngForm?.resetForm({
+      title: this.title,
+      language: this.selectedLanguage,
+      code: this.code,
+      tags: this.tags,
+    });
   }
 
   handleSubmit(form: NgForm): void {
