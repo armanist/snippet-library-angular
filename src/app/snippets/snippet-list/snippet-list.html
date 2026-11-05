@@ -7,17 +7,25 @@
 </label>
 
 @if(list.isLoading()) {
-<p class="text-sm text-slate-500">Loading snippets...</p>
-} @else {
-<div class="grid gap-4">
-  @for (snippet of list.snippets(); track snippet.id) {
-  <app-snippet-card 
-    [snippet]="snippet" 
-    (editRequested)="handleEdit($event)" 
-    (deleteRequested)="handleDelete($event)">
-  </app-snippet-card>
-  }
-</div>
+  <p class="text-sm text-slate-600" role="status">
+    {{ list.snippets().length > 0 ? 'Updating snippets...' : 'Loading snippets...' }}
+  </p>
+} @else if(list.snippets().length === 0) {
+  <p class="text-slate-600">
+      {{ list.searchTerm().trim() ? 'No snippets match your search.' : 'No snippets yet.' }}
+  </p>
+}
+
+@if(list.snippets().length > 0) {
+  <div class="grid gap-4">
+    @for (snippet of list.snippets(); track snippet.id) {
+      <app-snippet-card 
+        [snippet]="snippet" 
+        (editRequested)="handleEdit($event)" 
+        (deleteRequested)="handleDelete($event)">
+      </app-snippet-card>
+    }
+  </div>
 }
 
 @if (list.pagination(); as pageInfo) {

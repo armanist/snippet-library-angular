@@ -34,12 +34,15 @@ export class SnippetListService {
     private readonly changes = inject(SnippetChanges);
 
     private readonly pageSize = 2;
-    private readonly listQueries = new Subject<SnippetListQuery>();
+    private readonly searchQueries = new Subject<SnippetListQuery>();
+    private readonly pageQueries = new Subject<SnippetListQuery>();
     private readonly refreshQueries = new Subject<SnippetListQuery>();
 
     constructor() {
-        const debouncedQueries = this.listQueries.pipe(
-            debounceTime(300),
+        const queries = merge(
+            this.searchQueries.pipe(debounceTime(300)),
+            this.pageQueries
+        ).pipe(
             startWith({ search: '', page: 1, limit: this.pageSize }),
             distinctUntilChanged((previous, current) =>
                 previous.search === current.search &&
@@ -48,7 +51,7 @@ export class SnippetListService {
             ),
         );
 
-        merge(debouncedQueries, this.refreshQueries)
+        merge(queries, this.refreshQueries)
             .pipe(switchMap((query) => this.loadSnippets(query)))
             .subscribe((response) => {
                 const {page, totalPages} = response.pagination;
@@ -69,7 +72,7 @@ export class SnippetListService {
     search(term: string): void {
         this.searchTermState.set(term);
 
-        this.listQueries.next({
+        this.searchQueries.next({
             search: term.trim(),
             page: 1,
             limit: this.paginationState()?.limit ?? this.pageSize
@@ -83,7 +86,7 @@ export class SnippetListService {
             return;
         }
 
-        this.listQueries.next({
+        this.pageQueries.next({
             search: this.searchTermState().trim(),
             page,
             limit: pagination.limit
