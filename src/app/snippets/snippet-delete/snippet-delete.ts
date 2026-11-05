@@ -29,8 +29,12 @@ export class SnippetDelete {
 
                 this.confirmDialog.close();
             },
-            error: () => {
-                this.toast.showError('Could not delete snippet.');
+            error: (error: unknown) => {
+                const message = error instanceof Error 
+                    ? error.message
+                    : 'Could not delete snippet.'
+
+                this.toast.showError(message);
             },
         });
     }

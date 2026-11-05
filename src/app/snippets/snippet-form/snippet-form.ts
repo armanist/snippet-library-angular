@@ -1,13 +1,12 @@
-import { 
-  Component, 
-  EventEmitter, 
-  Input, 
-  Output, 
-  OnChanges, 
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  OnChanges,
   SimpleChanges,
   ViewChild,
   ElementRef,
-  viewChild, 
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { languages, type Language } from '../contracts/snippet-language';
@@ -35,13 +34,13 @@ export class SnippetForm implements OnChanges {
   tags = '';
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(!changes['editingSnippet']) {
+    if (!changes['editingSnippet']) {
       return;
     }
-    
+
     const snippet = this.editingSnippet;
 
-    if(snippet) {
+    if (snippet) {
       this.titleInput.nativeElement.focus();
     }
 
@@ -67,10 +66,19 @@ export class SnippetForm implements OnChanges {
 
     const formValue = form.value;
 
+    const title = String(formValue.title ?? '').trim();
+    const code = String(formValue.code ?? '').trim();
+
+    if (!title || !code) {
+      form.control.markAllAsTouched();
+      this.validationError.emit('Title and code are required.');
+      return;
+    }
+
     const draft: SnippetDraft = {
-      title: String(formValue.title ?? '').trim(),
+      title,
       language: this.selectedLanguage,
-      code: String(formValue.code ?? '').trim(),
+      code,
       tags: String(formValue.tags ?? '')
         .split(',')
         .map((tag) => tag.trim())

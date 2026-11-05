@@ -51,10 +51,12 @@ export class SnippetFormService {
 
                 this.toast.showSuccess(message);
             },
-            error: () => {
-                let message = snippetToEdit
-                    ? 'Could not update snippet.'
-                    : 'Could not add snippet.';
+            error: (error: unknown) => {
+                const message = error instanceof Error 
+                    ? error.message
+                    : snippetToEdit
+                        ? 'Could not update snippet.'
+                        : 'Could not add snippet.';
 
                 this.toast.showError(message);
             }

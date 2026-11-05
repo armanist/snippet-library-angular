@@ -98,7 +98,11 @@ export class SnippetListService {
                 console.error('Angular failed to load snippets:', error);
                 this.isLoadingState.set(false);
 
-                this.toast.showError('Could not load snippets.');
+                const message = error instanceof Error 
+                    ? error.message
+                    : 'Could not load snippets.';
+
+                this.toast.showError(message);
 
                 return EMPTY;
             }),
